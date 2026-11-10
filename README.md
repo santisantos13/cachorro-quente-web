@@ -24,10 +24,6 @@ HTML, CSS e JavaScript puro, sem frameworks. Os dados ficam no `localStorage` do
 - Texto digitado pelo usuário é escapado antes de ir para o HTML.
 - Datas montadas pelas partes (ano, mês, dia) para evitar problemas de fuso horário.
 
-## Versão com back-end
-
-Este projeto também existe em uma versão com **Python (Flask) e SQLite**, com API REST própria: [adicione aqui o link do repositório da versão Flask].
-
 ## Como rodar
 
 Baixe o projeto e abra o `index.html` no navegador. Não precisa instalar nada.
