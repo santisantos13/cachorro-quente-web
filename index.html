@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#c8281e">
+  <meta name="description"
+    content="Gestão financeira de vendas de cachorro-quente: faturamento bruto, gastos, perdas e lucro líquido por dia, semana e mês.">
+  <title>Gestão do Cachorro-Quente</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌭</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const temaInicial =
+      localStorage.getItem("cq-tema") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro");
+    document.documentElement.dataset.tema = temaInicial;
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>🌭 Gestão do Cachorro-Quente</h1>
+    <p>Faturamento, gastos e lucro dos dias de venda</p>
+    <button type="button" id="btn-tema" class="btn-tema" aria-label="Alternar modo claro e escuro">🌙</button>
+  </header>
+
+  <main>
+    <section>
+      <h2>Resumo por período</h2>
+      <div class="linha">
+        <label class="campo">
+          <span>Período</span>
+          <select id="periodo-tipo">
+            <option value="dia">Diário</option>
+            <option value="semana">Semanal</option>
+            <option value="mes" selected>Mensal</option>
+          </select>
+        </label>
+        <label class="campo">
+          <span>Data de referência</span>
+          <input type="date" id="periodo-data">
+        </label>
+        <button type="button" id="btn-exportar" class="secundario">Baixar planilha (CSV)</button>
+      </div>
+
+      <p id="periodo-titulo" class="periodo-titulo"></p>
+      <div class="cards" id="cards-periodo"></div>
+
+      <h3>Dias de venda no período</h3>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Dia</th>
+              <th>Bruto</th>
+              <th>Gastos</th>
+              <th>Líquido</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-periodo"></tbody>
+        </table>
+      </div>
+
+      <h3>Gastos por categoria no período</h3>
+      <ul id="gastos-periodo" class="gastos"></ul>
+    </section>
+
+    <section>
+      <h2>Dias de venda</h2>
+      <form id="form-evento" class="linha">
+        <label class="campo campo-grande">
+          <span>Nome do dia</span>
+          <input type="text" id="evento-nome" placeholder="Ex: Jogo de domingo" required>
+        </label>
+        <label class="campo">
+          <span>Data</span>
+          <input type="date" id="evento-data" required>
+        </label>
+        <button type="submit">Criar dia</button>
+      </form>
+      <ul id="lista-eventos" class="lista-eventos"></ul>
+    </section>
+
+    <section id="painel-evento" hidden>
+      <div class="topo-evento">
+        <h2 id="titulo-evento"></h2>
+        <button type="button" class="perigo" id="btn-excluir-evento">Excluir dia</button>
+      </div>
+
+      <div class="cards" id="cards-evento"></div>
+
+      <h3>Novo lançamento</h3>
+      <form id="form-lancamento" class="linha">
+        <label class="campo">
+          <span>Tipo</span>
+          <select id="lanc-tipo">
+            <option value="receita">Receita</option>
+            <option value="despesa">Despesa</option>
+          </select>
+        </label>
+        <label class="campo">
+          <span>Categoria</span>
+          <select id="lanc-categoria"></select>
+        </label>
+        <label class="campo campo-grande">
+          <span>Descrição</span>
+          <input type="text" id="lanc-descricao" placeholder="Opcional">
+        </label>
+        <label class="campo">
+          <span>Valor (R$)</span>
+          <input type="number" id="lanc-valor" placeholder="0,00" step="0.01" min="0.01" required>
+        </label>
+        <button type="submit">Adicionar</button>
+      </form>
+
+      <h3>Lançamentos</h3>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Categoria</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabela-lancamentos"></tbody>
+        </table>
+      </div>
+
+      <h3>Gastos por categoria</h3>
+      <ul id="gastos-categoria" class="gastos"></ul>
+    </section>
+
+    <section>
+      <h2>Backup e dados</h2>
+      <p class="aviso">
+        Os dados ficam salvos <strong>só neste navegador, neste aparelho</strong>. Nada é enviado
+        pra internet. Faça um backup de vez em quando, e use-o pra levar os dados pra outro aparelho.
+      </p>
+      <div class="linha">
+        <button type="button" id="btn-backup">Salvar backup</button>
+        <button type="button" id="btn-restaurar" class="secundario">Restaurar backup</button>
+        <button type="button" id="btn-exemplo" class="secundario">Carregar exemplo</button>
+        <button type="button" id="btn-apagar" class="perigo">Apagar tudo</button>
+      </div>
+      <input type="file" id="arquivo-backup" accept=".json,application/json" hidden>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
